@@ -5,7 +5,7 @@ import { SidebarBag } from './components/SidebarBag';
 import { Spinner } from './components/Spinner';
 import { Home } from './pages/Home';
 
-import { useFetchUser } from './utils/hooks/useFetchUser';
+import { useFetchUser } from './hooks/useFetchUser';
 
 function App() {
   const { user, loading, error } = useFetchUser();

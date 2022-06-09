@@ -1,4 +1,4 @@
-import { useFetchUser } from '../../utils/hooks/useFetchUser';
+import { useFetchUser } from '../../hooks/useFetchUser';
 
 import {
   AiOutlineUserAdd,

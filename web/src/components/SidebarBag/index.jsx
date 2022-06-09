@@ -1,11 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
+import ShopContext from '../../context/ShopContext';
+
 import { AiOutlineDelete, AiOutlineClose } from 'react-icons/ai';
 import { Dock } from 'react-dock';
 
 import * as S from './styles';
 
 export function SidebarBag() {
+  const context = useContext(ShopContext);
   const [opened, setOpened] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener('openCart', () => {
+      setOpened(true);
+    });
+  }, []);
 
   if (opened) {
     document.getElementsByTagName('body')[0].style = 'overflow-y: hidden';
@@ -13,11 +22,7 @@ export function SidebarBag() {
     document.getElementsByTagName('body')[0].style = 'overflow-y: auto';
   }
 
-  useEffect(() => {
-    window.addEventListener('openCart', () => {
-      setOpened(true);
-    });
-  }, []);
+  console.log(context);
 
   return (
     <>
@@ -34,19 +39,39 @@ export function SidebarBag() {
             <AiOutlineClose size={30} onClick={() => setOpened(false)} />
           </S.CartBarClose>
           <S.CartBar>
-            <S.CartBarTitle>Cart Items</S.CartBarTitle>
+            <S.CartBarTitle>
+              Cart Items (
+              {context.cart.reduce((count, curItem) => {
+                return count + curItem.quantity;
+              }, 0)}
+              )
+            </S.CartBarTitle>
+
             <S.CartBarList>
-              {[1, 2, 3, 4, 5, 6].map(index => {
+              {context.cart.length <= 0 && (
+                <S.EmptyCart>No Item in the Cart!</S.EmptyCart>
+              )}
+              {context.cart.map(cartItem => {
                 return (
-                  <S.CartBarItem key={index}>
+                  <S.CartBarItem key={cartItem.id}>
                     <S.CartBarInfo>
-                      <S.Thumb src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60" />
+                      <S.Thumb src={cartItem.image} />
+                      <span>({cartItem.quantity})</span>
 
                       <S.CartBarContent>
-                        <S.CartBarContentTitle>PEDRIM</S.CartBarContentTitle>
-                        <S.CartBarContentPrice>9 reais</S.CartBarContentPrice>
+                        <S.CartBarContentTitle>
+                          {cartItem.title}
+                        </S.CartBarContentTitle>
+                        <S.CartBarContentPrice>
+                          {cartItem.price}
+                        </S.CartBarContentPrice>
                         <S.CartBarContentRemove>
-                          <AiOutlineDelete size={30} />
+                          <AiOutlineDelete
+                            size={24}
+                            onClick={() =>
+                              context.removeProductFromCart(cartItem.id)
+                            }
+                          />
                         </S.CartBarContentRemove>
                       </S.CartBarContent>
                     </S.CartBarInfo>
@@ -54,6 +79,10 @@ export function SidebarBag() {
                 );
               })}
             </S.CartBarList>
+            <S.CartBarTotal>
+              <h4>Total:</h4>
+              <span>R$ 3900,9</span>
+            </S.CartBarTotal>
           </S.CartBar>
         </S.CartBarWrapper>
 

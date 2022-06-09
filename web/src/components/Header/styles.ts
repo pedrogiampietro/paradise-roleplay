@@ -8,6 +8,12 @@ export const Header = styled.header`
 
   border-bottom: 1px solid #32323d;
   padding: 28px 0px;
+
+  @media screen and (max-width: 1500px) {
+    flex-wrap: wrap;
+    justify-content: end;
+    padding: 0px;
+  }
 `;
 
 export const SpaceDiv = styled.div`

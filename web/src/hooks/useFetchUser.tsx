@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getAuthStatus } from '../api';
-import { User } from '../types';
+import { getAuthStatus } from '../utils/api';
+import { User } from '../utils/types';
 
 export function useFetchUser() {
   const [user, setUser] = useState<User>();
